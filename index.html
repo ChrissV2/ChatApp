@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300&family=Poppins:wght@200;400;700&display=swap"
+        rel="stylesheet">
+    <title>ChatApp</title>
+    <link rel="stylesheet" href="./dist/css/style.css">
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <div class="flex-wrapper">
+
+            <nav class="nav">
+                <span class="nav__logo">ChatApp</span>
+            </nav>
+
+            <aside class="aside">
+
+                <div class="usersList">
+
+                    <div class="usersList__item">
+
+                        <img src="./src/img/icons/user.svg" alt="User avatar" class="usersList__item-avatar">
+                        <span class="usersList__item-name"></span>
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+
+        </div>
+
+        <div class="loginForm">
+
+
+            <form class="loginForm__form">
+
+                <span class="loginForm__form-title">Login</span>
+
+                <div class="loginForm__form-formElements">
+
+                    <label for="mail" class="loginForm__form-label loginForm__form-label--emailLabel">Email</label>
+                    <input type="email" class="loginForm__form-input loginForm__form-input--emailInput" id="mail">
+
+                    <label for="password"
+                        class="loginForm__form-label loginForm__form-label--passwordLabel">Password</label>
+                    <input type="password" class="loginForm__form-input loginForm__form-input--passwordInput"
+                        id="password">
+
+                    <div class="loginForm__form-checkBoxElement">
+
+                        <input id="checkbox" type="checkbox" class="loginForm__form-checkBox">
+                        <label for="checkbox"
+                            class="loginForm__form-label loginForm__form-label--checkBoxLabel">Remember
+                            Me</label>
+
+                    </div>
+
+                    <button class="loginForm__form-btn">Login</button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+        <main class="main">
+
+            <section class="messages">
+
+                <div class="messages__userNameBox">
+
+
+
+                    <div class="messages__userNameBox-userData">
+
+                        <img src="./src/img/icons/user.svg" alt="User avatar" class="messages__userNameBox-userImage">
+                        <span class="messages__userNameBox-userName"></span>
+
+                    </div>
+
+                    <div class="messages__userNameBox-logOut">
+
+                        <span class="messages__userNameBox-logOut-btnLabel">LogOut</span>
+                        <button class="messages__userNameBox-logOut-btn" aria-label="Logout button"></button>
+
+                    </div>
+
+                </div>
+
+                <ul class="messages__messagesList">
+
+
+
+                </ul>
+
+            </section>
+
+            <section class="writeMessageBox">
+
+                <form class="writeMessageBox__form">
+
+                    <input type="text" autocomplete="off" class="writeMessageBox__form-input"
+                        placeholder="Write a message...">
+                    <button class="writeMessageBox__form-sendBtn" aria-label="send message button"></button>
+
+                </form>
+
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- <ul id="messages"></ul>
+    <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Send</button>
+        <button id="toggle-btn">Disconnect</button>
+    </form> --> 
+    <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>
+    <script>
+        const User1Email = "1"
+        const User1Pass = "1"
+        const User2Email = "2"
+        const User2Pass = "2"
+        const form = document.querySelector('.writeMessageBox__form');
+        const input = document.querySelector('.writeMessageBox__form-input');
+        const messages = document.querySelector('.messages__messagesList');
+        const toggleButton = document.querySelector('.writeMessageBox__form-sendBtn');
+        const wholeLoginForm = document.querySelector('.loginForm')
+        const sendFormBtn = document.querySelector('.loginForm__form-btn')
+        const userNameBox = document.querySelector('.messages__userNameBox-userName')
+        const emailInput = document.getElementById('mail')
+        const passwordInput = document.getElementById('password')
+        const usersListFirstName = document.querySelector('.usersList__item-name')
+        const logOutBtn = document.querySelector('.messages__userNameBox-logOut-btn')
+        const logInCheckBox = document.querySelector('.loginForm__form-checkBox')
+        const userAvatarBox = document.querySelector('.messages__userNameBox-userImage')
+        const userAvatarList = document.querySelector('.usersList__item-avatar')
+        let counter = 0;
+        let currentSender
+        let currentDate
+        let modifiedDate
+        let currentAvatar
+
+        const handleRememberedLogin = () => {
+            const storedUser = localStorage.getItem('currentUser')
+            const storedSecondUser = localStorage.getItem('secondUser')
+
+            if (storedUser && storedSecondUser) {
+                currentSender = storedUser
+                userNameBox.textContent = storedSecondUser
+                usersListFirstName.textContent = storedSecondUser
+                messages.scrollTop = messages.scrollHeight;
+            } else {
+                wholeLoginForm.style.left = '50%'
+            }
+        }
+
+        const handleLogOut = () => {
+            wholeLoginForm.classList.remove('loginForm-logged')
+            wholeLoginForm.classList.add('loginForm-loggedOut')
+            localStorage.removeItem('currentUser')
+            localStorage.removeItem('secondUser')
+        }
+
+        logOutBtn.addEventListener('click', handleLogOut)
+
+        const socket = io({
+            auth: {
+                serverOffset: 0
+            },
+            ackTimeout: 10000,
+            retries: 3,
+        });
+
+
+        sendFormBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            handleLogin()
+        })
+
+        // toggleButton.addEventListener('click', (e) => {
+        //     e.preventDefault();
+        //     if (socket.connected) {
+        //         toggleButton.innerText = 'Connect';
+        //         socket.disconnect();
+        //     } else {
+        //         toggleButton.innerText = 'Disconnect';
+        //         socket.connect();
+        //     }
+        // });
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (input.value) {
+                currentDate = getCurrentDate()
+                const clientOffset = `${socket.id}-${counter++}`;
+                socket.emit('chat message', input.value, clientOffset, currentSender, currentDate);
+                input.value = '';
+            }
+        });
+
+        socket.on('chat message', (msg, sender, date, serverOffset) => {
+            const item = document.createElement('li');
+            handleAvatars(sender)
+            checkDate(date)
+            item.textContent = msg;
+            item.innerHTML = `${currentAvatar}
+            <div class="messages__messagesList-item-textContent">
+            <p class="messages__messagesList-item-userName">${sender} <span class="messages__messagesList-item-messageDate">${modifiedDate}</span></p>
+            <p class="messages__messagesList-item-userMessage">${msg}</p>
+            </div>`;
+            item.classList.add('messages__messagesList-item')
+            messages.appendChild(item);
+            setTimeout(() => {
+                item.classList.add('messages__messagesList-item-fadeIn');
+                messages.scrollTop = messages.scrollHeight;
+            }, 10); // You can adjust the delay value if needed
+            // window.scrollTo(0, document.body.scrollHeight);
+            socket.auth.serverOffset = serverOffset;
+        });
+
+        const handleLogin = () => {
+            const emailInputValue = emailInput.value
+            const passwordInputValue = passwordInput.value
+
+            const handleSuccessfulLogin = (setCurrentSender, userName) => {
+
+                currentSender = setCurrentSender
+                userNameBox.textContent = userName
+                usersListFirstName.textContent = userName
+                clearLoginInputs()
+                wholeLoginForm.classList.remove('loginForm-loggedOut')
+                wholeLoginForm.classList.add('loginForm-logged')
+                emailInput.classList.remove('loginForm__form-input-incorrect')
+                passwordInput.classList.remove('loginForm__form-input-incorrect')
+                messages.scrollTop = messages.scrollHeight;
+
+                if (logInCheckBox.checked) {
+                    localStorage.setItem('currentUser', currentSender)
+                    localStorage.setItem('secondUser', userName)
+                    logInCheckBox.checked = false
+                }
+            }
+
+            if (emailInputValue === User1Email && passwordInputValue === User1Pass) {
+
+                handleSuccessfulLogin('John', 'Emanuel')
+                userAvatarBox.src = './src/img/icons/userTwo.svg'
+                userAvatarList.src = './src/img/icons/userTwo.svg'
+
+            } else if (emailInputValue === User2Email && passwordInputValue === User2Pass) {
+
+                handleSuccessfulLogin('Emanuel', 'John')
+                userAvatarBox.src = './src/img/icons/user.svg'
+                userAvatarList.src = './src/img/icons/user.svg'
+
+            } else if (emailInputValue !== User1Email || emailInputValue !== User2Email) {
+
+                emailInput.classList.add('loginForm__form-input-incorrect')
+
+                if (passwordInputValue !== User1Pass || passwordInputValue === User2Pass) {
+
+                    passwordInput.classList.add('loginForm__form-input-incorrect')
+
+                }
+
+            }
+
+
+        }
+
+        const clearLoginInputs = () => {
+            emailInput.value = ''
+            passwordInput.value = ''
+        }
+
+        const getCurrentDate = () => {
+            const now = new Date();
+
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const year = now.getFullYear();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+
+            const isoFormattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+            return isoFormattedDate
+        }
+
+        const checkDate = date => {
+
+            const serverDate = new Date(date);
+
+            const currentDate2 = new Date();
+
+            if (
+                serverDate.getDate() === currentDate2.getDate() &&
+                serverDate.getMonth() === currentDate2.getMonth() &&
+                serverDate.getFullYear() === currentDate2.getFullYear()
+            ) {
+                const formattedTime = `${serverDate.getHours()}:${serverDate.getMinutes()}`;
+                modifiedDate = `Today at ${formattedTime}`;
+            } else if (
+                serverDate.getDate() === currentDate2.getDate() - 1 &&
+                serverDate.getMonth() === currentDate2.getMonth() &&
+                serverDate.getFullYear() === currentDate2.getFullYear()
+            ) {
+                const formattedTime = `${serverDate.getHours()}:${serverDate.getMinutes()}`;
+                modifiedDate = `Yesterday at ${formattedTime}`;
+            } else {
+                const inputDateFormat = new Date(date);
+
+                const day = String(inputDateFormat.getDate()).padStart(2, '0');
+                const month = String(inputDateFormat.getMonth() + 1).padStart(2, '0');
+                const year = inputDateFormat.getFullYear();
+                const hours = String(inputDateFormat.getHours()).padStart(2, '0');
+                const minutes = String(inputDateFormat.getMinutes()).padStart(2, '0');
+
+                modifiedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
+            }
+
+        }
+
+        const handleAvatars = (sender) => {
+            if (sender == 'John') {
+                currentAvatar = '<img src="./src/img/icons/user.svg" alt="User avatar" class="messages__messagesList-item-userAvatar">'
+            } else {
+                currentAvatar = '<img src="./src/img/icons/userTwo.svg" alt="User avatar" class="messages__messagesList-item-userAvatar">'
+            }
+        }
+
+        // document.addEventListener('DOMContentLoaded', handleRememberedLogin)
+        window.addEventListener('DOMContentLoaded', handleRememberedLogin)
+
+    </script>
+</body>
+
+
+</html>

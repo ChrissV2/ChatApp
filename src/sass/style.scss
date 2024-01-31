@@ -1,0 +1,479 @@
+*,
+*::after,
+*::before {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+:root {
+	scroll-behavior: smooth;
+	font-size: 62.5%;
+}
+
+body {
+	overflow: hidden;
+	font-family: 'Poppins', sans-serif;
+	font-size: 1.8rem;
+	background-color: rgb(41, 42, 46);
+	color: white;
+}
+
+::-webkit-scrollbar {
+	width: 0.8em;
+}
+
+::-webkit-scrollbar-track {
+	background: rgb(29, 30, 32);
+	border-radius: 100vw;
+	margin-block: 0.5em;
+}
+
+::-webkit-scrollbar-thumb {
+	background: rgb(18, 19, 20);
+	border-radius: 100vw;
+}
+
+.wrapper {
+	display: flex;
+	margin: 0 auto;
+	width: 100%;
+	max-width: 1920px;
+}
+
+.flex-wrapper {
+	display: flex;
+	flex-direction: column;
+	width: 20%;
+}
+
+.nav {
+	background-color: rgb(32, 33, 36);
+	padding: 1em 0;
+	width: 100%;
+	text-align: center;
+	&__logo {
+		font-size: 4rem;
+		color: white;
+	}
+}
+
+.aside {
+	min-height: 90vh;
+	width: 100%;
+	text-align: center;
+	background-color: rgb(32, 33, 36);
+	z-index: 2;
+}
+
+.loginForm {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 100%;
+	top: 50%;
+	left: -50%;
+	transform: translate(-50%, -50%);
+	background-color: rgb(20, 20, 22);
+	z-index: 100;
+	transition: left 0.5s ease-in-out;
+
+	&-logged {
+		left: -50% !important;
+	}
+
+	&-loggedOut {
+		left: 50% !important;
+	}
+
+	&__form {
+		display: inherit;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		width: 30%;
+		height: 50%;
+		// background-color: #292a2e;
+		background: rgb(41, 42, 46);
+		background: linear-gradient(0deg, rgba(41, 42, 46, 1) 71%, rgba(58, 60, 65, 1) 100%);
+		border-radius: 26px;
+
+		&-formElements {
+			display: inherit;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+		}
+
+		&-title {
+			margin-bottom: 1em;
+			font-size: 3rem;
+			font-weight: bold;
+		}
+
+		&-input {
+			margin-bottom: 1em;
+			padding: 1em 2em;
+			width: 60%;
+			color: white;
+			background-color: rgb(32, 33, 36);
+			border: 1px solid transparent;
+			border-radius: 26px;
+			transition: border 0.5s ease-in-out;
+
+			&-incorrect {
+				border: 1px solid red;
+			}
+		}
+
+		&-label {
+			margin-bottom: 0.5em;
+		}
+
+		&-checkBoxElement {
+			margin-top: 0.5em;
+		}
+
+		&-btn {
+			padding: 1em 2em;
+			margin-top: 1.2em;
+			width: 60%;
+			border: 0;
+			border-radius: 26px;
+			background-color: rgb(32, 33, 36);
+			color: white;
+			font-size: 1.8rem;
+			font-family: 'Poppins', sans-serif;
+			cursor: pointer;
+			transition: transform 0.2s ease-in-out;
+
+			&:hover,
+			&:focus {
+				transform: scale(1.1);
+			}
+		}
+	}
+}
+
+.main {
+	width: 80%;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-direction: column;
+}
+
+.usersList {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100%;
+	width: 100%;
+
+	&__item {
+		display: inherit;
+		justify-content: start;
+		align-items: center;
+		width: 90%;
+		min-height: 10%;
+		background-color: rgb(47, 48, 53);
+		border-radius: 26px;
+		transition: background-color 0.3s ease-in-out;
+		cursor: pointer;
+
+		&-name {
+			margin-left: 0.3em;
+		}
+
+		&-avatar {
+			margin-left: 1em;
+		}
+
+		&:hover,
+		&:focus {
+			background-color: rgb(41, 42, 46);
+		}
+	}
+}
+
+// Messages Section //
+
+.messages {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	height: 90vh;
+	width: 100%;
+
+	&__userNameBox {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 0.5em 1em;
+		background-color: rgb(32, 33, 36);
+
+		&-userData {
+			display: inherit;
+			align-items: center;
+		}
+
+		&-userName {
+			font-weight: bold;
+		}
+
+		&-userImage {
+			pointer-events: none;
+			user-select: none;
+			width: 64px;
+			height: 64px;
+		}
+
+		&-logOut {
+			display: inherit;
+			align-items: center;
+			gap: 10px;
+
+			&-btnLabel {
+				user-select: none;
+			}
+
+			&-btn {
+				width: 30px;
+				height: 30px;
+				background-image: url('../../src/img/icons/log-out.svg');
+				background-size: cover;
+				background-position: center;
+				background-color: transparent;
+				border: 0;
+				transition: transform 0.2s ease-in-out;
+				cursor: pointer;
+
+				&:hover,
+				&:focus {
+					transform: scale(1.1);
+				}
+			}
+		}
+	}
+
+	&__messagesList {
+		display: flex;
+		flex-direction: column;
+		list-style: none;
+		padding: 1em 2em;
+		overflow-y: auto;
+		overflow-x: hidden;
+
+		&-item {
+			display: flex;
+			align-items: center;
+			position: relative;
+			left: -100px;
+			margin: 1em 0;
+			opacity: 0;
+			transition: left 0.3s, opacity 0.5s ease-in-out;
+
+			&-fadeIn {
+				opacity: 1;
+				left: 0;
+			}
+
+			&-textContent {
+				display: flex;
+				flex-direction: column;
+				align-items: start;
+				justify-content: start;
+				width: 100%;
+				margin-left: 0.3em;
+			}
+
+			&-userName {
+				font-weight: bold;
+			}
+
+			&-messageDate {
+				margin-left: 0.2em;
+				font-size: 1.2rem;
+				font-weight: normal;
+				color: rgba(255, 255, 255, 0.459);
+			}
+
+			&-userMessage {
+				font-weight: lighter;
+				// overflow-wrap: break-word;
+				// text-wrap: wrap;
+				word-wrap: break-word;
+			}
+
+			&-userAvatar {
+				height: 50px;
+				width: 50px;
+				pointer-events: none;
+				user-select: none;
+			}
+		}
+	}
+}
+
+// Writebox Section //
+
+.writeMessageBox {
+	height: 10vh;
+	width: 100%;
+
+	&__form {
+		display: flex;
+		justify-content: center;
+		align-items: start;
+		width: 100%;
+		height: 100%;
+
+		&-input {
+			width: 92%;
+			padding: 1em 2em;
+			margin-bottom: 2em;
+			margin-left: 0.5em;
+			font-size: 1.8rem;
+			border: none;
+			border-radius: 45px;
+			background-color: rgb(32, 33, 36);
+			color: white;
+			outline: none;
+		}
+
+		&-sendBtn {
+			position: relative;
+			top: -4px;
+			width: 60px;
+			height: 60px;
+			margin-bottom: 2em;
+			margin-right: 0.5em;
+			margin-left: 1.5em;
+			background-image: url('../../src/img/icons/send.svg');
+			background-size: 100%;
+			background-repeat: no-repeat;
+			background-color: transparent;
+			border: none;
+			cursor: pointer;
+		}
+	}
+}
+
+///// MEDIA //////
+
+@media (max-width: 1200px) {
+	.flex-wrapper {
+		display: none;
+	}
+
+	.main {
+		width: 100%;
+	}
+
+	.messages {
+		width: 100%;
+	}
+
+	.loginForm {
+		&__form {
+			width: 60%;
+			height: 60%;
+		}
+	}
+
+	.messages {
+		&__messagesList {
+			padding: 1em 0.8em;
+		}
+
+		&__userNameBox {
+			padding: 0.5em 0.4em;
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.loginForm {
+		&__form {
+			width: 70%;
+		}
+	}
+}
+
+@media (max-width: 576px) {
+	.loginForm {
+		&__form {
+			width: 80%;
+			height: 70%;
+
+			&-input {
+				width: 80%;
+			}
+
+			&-btn {
+				width: 80%;
+			}
+		}
+	}
+
+	.writeMessageBox__form-sendBtn {
+		top: -2px;
+	}
+
+	::-webkit-scrollbar {
+		width: 0.5em;
+	}
+
+	.messages {
+		height: 82vh;
+	}
+
+	.writeMessageBox {
+		height: 18vh;
+	}
+}
+
+@media (max-width: 450px) {
+	.writeMessageBox__form-sendBtn {
+		top: 0;
+	}
+
+	.loginForm {
+
+		&__form {
+			width: 80%;
+			height: 80%;
+		}
+	}
+
+	.messages {
+		&__messagesList {
+			padding: 1em 0.5em;
+		}
+	}
+}
+
+@media (max-width: 400px) {
+	.writeMessageBox__form-sendBtn {
+		top: 2px;
+	}
+}
+
+@media (max-width: 350px) {
+	.writeMessageBox__form-sendBtn {
+		top: 4px;
+	}
+
+	.loginForm {
+
+		&__form {
+			width: 85%;
+			height: 85%;
+		}
+	}
+}
+

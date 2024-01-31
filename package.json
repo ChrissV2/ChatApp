@@ -1,0 +1,23 @@
+{
+  "name": "chatapp",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "compile": "concurrently \"npm:compile-server\" \"npm:compile-sass\"",
+    "compile-server": "node index.js",
+    "compile-sass": "sass --watch --no-source-map ./src/sass/style.scss ./dist/css/style.css"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^8.2.2",
+    "express": "^4.18.2",
+    "sass": "^1.69.7",
+    "socket.io": "^4.7.4",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  }
+}
