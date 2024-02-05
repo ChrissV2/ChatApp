@@ -7,7 +7,9 @@
   "scripts": {
     "compile": "concurrently \"npm:compile-server\" \"npm:compile-sass\"",
     "compile-server": "node index.js",
-    "compile-sass": "sass --watch --no-source-map ./src/sass/style.scss ./dist/css/style.css"
+    "compile-sass": "sass --watch --no-source-map ./src/sass/style.scss ./dist/css/style.css",
+    "build": "npm run compile",
+    "start": "npm run compile-server"
   },
   "keywords": [],
   "author": "",
