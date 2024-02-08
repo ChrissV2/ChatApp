@@ -28,7 +28,7 @@
 
                     <div class="usersList__item">
 
-                        <img src="./src/img/icons/user.svg" alt="User avatar" class="usersList__item-avatar">
+                        <img src="" alt="User avatar" class="usersList__item-avatar">
                         <span class="usersList__item-name"></span>
 
                     </div>
@@ -84,7 +84,7 @@
 
                     <div class="messages__userNameBox-userData">
 
-                        <img src="./src/img/icons/user.svg" alt="User avatar" class="messages__userNameBox-userImage">
+                        <img src="" alt="User avatar" class="messages__userNameBox-userImage">
                         <span class="messages__userNameBox-userName"></span>
 
                     </div>
@@ -126,7 +126,7 @@
     <form id="form" action="">
         <input id="input" autocomplete="off" /><button>Send</button>
         <button id="toggle-btn">Disconnect</button>
-    </form> --> 
+    </form> -->
     <script src="https://cdn.socket.io/4.7.3/socket.io.min.js"></script>
     <script>
         const User1Email = "1"
@@ -156,11 +156,15 @@
         const handleRememberedLogin = () => {
             const storedUser = localStorage.getItem('currentUser')
             const storedSecondUser = localStorage.getItem('secondUser')
+            const currentUserAvatarBox = localStorage.getItem('currentUserAvatarBox')
+            const currentUserAvatarList = localStorage.getItem('currentUserAvatarList')
 
             if (storedUser && storedSecondUser) {
                 currentSender = storedUser
                 userNameBox.textContent = storedSecondUser
                 usersListFirstName.textContent = storedSecondUser
+                userAvatarBox.src = currentUserAvatarBox
+                userAvatarList.src = currentUserAvatarList
                 messages.scrollTop = messages.scrollHeight;
             } else {
                 wholeLoginForm.style.left = '50%'
@@ -259,12 +263,16 @@
                 handleSuccessfulLogin('John', 'Emanuel')
                 userAvatarBox.src = './src/img/icons/userTwo.svg'
                 userAvatarList.src = './src/img/icons/userTwo.svg'
+                localStorage.setItem('currentUserAvatarBox', './src/img/icons/userTwo.svg')
+                localStorage.setItem('currentUserAvatarList', './src/img/icons/userTwo.svg')
 
             } else if (emailInputValue === User2Email && passwordInputValue === User2Pass) {
 
                 handleSuccessfulLogin('Emanuel', 'John')
                 userAvatarBox.src = './src/img/icons/user.svg'
                 userAvatarList.src = './src/img/icons/user.svg'
+                localStorage.setItem('currentUserAvatarBox', './src/img/icons/user.svg')
+                localStorage.setItem('currentUserAvatarList', './src/img/icons/user.svg')
 
             } else if (emailInputValue !== User1Email || emailInputValue !== User2Email) {
 
@@ -311,14 +319,14 @@
                 serverDate.getMonth() === currentDate2.getMonth() &&
                 serverDate.getFullYear() === currentDate2.getFullYear()
             ) {
-                const formattedTime = `${serverDate.getHours()}:${serverDate.getMinutes()}`;
+                const formattedTime = `${String(serverDate.getHours()).padStart(2, '0')}:${String(serverDate.getMinutes()).padStart(2, '0')}`;;
                 modifiedDate = `Today at ${formattedTime}`;
             } else if (
                 serverDate.getDate() === currentDate2.getDate() - 1 &&
                 serverDate.getMonth() === currentDate2.getMonth() &&
                 serverDate.getFullYear() === currentDate2.getFullYear()
             ) {
-                const formattedTime = `${serverDate.getHours()}:${serverDate.getMinutes()}`;
+                const formattedTime = `${String(serverDate.getHours()).padStart(2, '0')}:${String(serverDate.getMinutes()).padStart(2, '0')}`;
                 modifiedDate = `Yesterday at ${formattedTime}`;
             } else {
                 const inputDateFormat = new Date(date);
