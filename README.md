@@ -37,10 +37,6 @@ I recently embarked on a remarkable journey of creating a real-time chat applica
 
 ### Built With
 
-<div>
-  <img src='./icons/react.svg'>
-  <img src='./icons/file-type-typescript-official.svg'>
-  <img src='./icons/vitejs.svg'>
-  <img src='./icons/chakraui.svg'>
-</div>
+[![My Skills](https://skillicons.dev/icons?i=html,css,js,nodejs,express,sqlite&perline=4)](https://skillicons.dev)
+
 
