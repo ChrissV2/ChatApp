@@ -9,6 +9,8 @@ The ChatApp allows users to log in, send messages, and view messages from other 
     <br />
     <a href="https://chatapp-lorv.onrender.com">View Demo</a>
     <br />
+    Little disclaimer: if there is a longer lack of activity, you’ll have to wait about 30sec to load the app
+    <br />
     <h2>Login Data</h2>
     First User
     <br />
