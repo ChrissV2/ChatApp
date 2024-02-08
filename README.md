@@ -39,4 +39,30 @@ I recently embarked on a remarkable journey of creating a real-time chat applica
 
 [![My Skills](https://skillicons.dev/icons?i=html,css,js,nodejs,express,sqlite&perline=4)](https://skillicons.dev)
 
+## Getting Started
+
+### Prerequisites
+
+This is an example of how to list things you need to use the software and how to install them.
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
+
+### Installation
+
+1. Clone the repo
+   ```sh
+   git clone https://github.com/ChrissV2/ChatApp.git
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+3. Run Scss compiler & Server
+   ```sh
+   npm run compile
+   ```
+
+
 
